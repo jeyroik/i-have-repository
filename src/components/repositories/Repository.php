@@ -80,16 +80,23 @@ abstract class Repository implements IRepository
     protected function initPlugins(): void
     {
         $this->arePluginsInitialized = true;
-        $pluginsDir = getenv('REPOSITORY__PLUGINS_FILE') ?: '';
-        if (empty($pluginsDir)) {
+        $pluginsPath = $this->getPluginsPath();
+        if (empty($pluginsPath)) {
             return;
-        } elseif (is_file($pluginsDir)) {
-            $pluginsConfigs = include $pluginsDir;
+        } elseif (is_file($pluginsPath)) {
+            $pluginsConfigs = include $pluginsPath;
             foreach ($pluginsConfigs as $class => $options) {
                 $this->plugins[] = new $class($options);
             }
         } else {
-            throw new \Exception('Missed repository plugins file! Please, set REPOSITORY__PLUGINS_FILE env');
+            throw new \Exception('Missed repository plugins file! Please, set REPOSITORY__PLUGINS_FILE env or const');
         }
+    }
+
+    protected function getPluginsPath(): string
+    {
+        return defined('REPOSITORY__PLUGINS_FILE') 
+                ? REPOSITORY__PLUGINS_FILE 
+                : (getenv('REPOSITORY__PLUGINS_FILE') ?: '');
     }
 }
