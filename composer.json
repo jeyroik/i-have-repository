@@ -1,0 +1,24 @@
+{
+    "name": "jeyroik/i-have-repository",
+    "description": "Simple repository wrapper",
+    "require": {
+        "jeyroik/i-have-attributes": "1.*",
+        "jeyroik/i-have-id": "0.*",
+        "jeyroik/i-have-date": "0.*",
+        "ramsey/uuid": "4.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12",
+        "phpstan/phpstan": "0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "jeyroik\\": "src/",
+            "tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --testdox tests",
+        "stan": "vendor/bin/phpstan analyse -l 5 src"
+    }
+}
