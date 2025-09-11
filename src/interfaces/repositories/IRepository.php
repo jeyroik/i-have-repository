@@ -16,6 +16,7 @@ interface IRepository
     public const LOWER_OR_EQUAL = '<=';
     public const IN = 'in';
     public const NOT_IN = 'nin';
+    public const LIKE = 'like';
 
     public const ALL_OPERATIONS = [
         self::NOT_EQUAL,
@@ -24,7 +25,8 @@ interface IRepository
         self::LOWER,
         self::LOWER_OR_EQUAL,
         self::IN,
-        self::NOT_IN
+        self::NOT_IN,
+        self::LIKE
     ];
 
     public function findOne(array $where = [], array $orderBy = []): ?IHaveAttributes;
