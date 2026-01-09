@@ -3,6 +3,7 @@
 use jeyroik\components\repositories\plugins\RepoPluginUuid;
 use jeyroik\components\repositories\RepositoryFile;
 use jeyroik\components\repositories\THasRepository;
+use jeyroik\interfaces\attributes\IHaveId;
 use jeyroik\interfaces\repositories\IRepository;
 use PHPUnit\Framework\TestCase;
 use tests\Some;
@@ -32,6 +33,15 @@ class RepsoitoryTest extends TestCase
         $this->assertEquals('some', $item['value']);
         $this->assertNotEmpty($item instanceof Some ? $item->getId() : '');
         $this->assertStringContainsString('-', $item instanceof Some ? $item->getId() : '');
+
+        file_put_contents('/tmp/plugins.php', '<?php return [' . RepoPluginUuid::class . '::class => ["rw" => false]];');
+
+        $item = $table->insertOne([
+            IHaveId::FIELD__ID => 'existed',
+            'value' => 'some'
+        ]);
+
+        $this->assertEquals('existed', $item->getId());
 
         unlink('/tmp/db.test.json');
         unlink('/tmp/plugins.php');
