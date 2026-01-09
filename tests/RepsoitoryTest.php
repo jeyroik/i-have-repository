@@ -17,8 +17,7 @@ class RepsoitoryTest extends TestCase
         putenv('REPOSITORY__PLUGINS_FILE=/tmp/plugins.php');
         file_put_contents(
             '/tmp/plugins.php', 
-            '<?php return [' . RepoPluginUuid::class 
-            . '::class => [\'' . RepoPluginUuid::OPTION__REWRITE . '\' => ' . RepoPluginUuid::REWRITE_OFF . ']];');
+            '<?php return [' . RepoPluginUuid::class.'::class => [\'rw\' => false]];');
 
         if (is_file('/tmp/db.test.json')) {
             unlink('/tmp/db.test.json');
