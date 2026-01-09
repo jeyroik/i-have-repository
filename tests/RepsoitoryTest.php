@@ -34,14 +34,31 @@ class RepsoitoryTest extends TestCase
         $this->assertNotEmpty($item instanceof Some ? $item->getId() : '');
         $this->assertStringContainsString('-', $item instanceof Some ? $item->getId() : '');
 
+        unlink('/tmp/db.test.json');
+        unlink('/tmp/plugins.php');
+    }
+
+    public function testRewrite()
+    {
+        putenv('REPOSITORY__PLUGINS_FILE=/tmp/plugins.php');
         file_put_contents('/tmp/plugins.php', '<?php return [' . RepoPluginUuid::class . '::class => ["rw" => false]];');
+
+        if (is_file('/tmp/db.test.json')) {
+            unlink('/tmp/db.test.json');
+        }
+        $table = $this->getRepo(Some::class, RepositoryFile::class, 'test');
+
+        $this->assertInstanceOf(IRepository::class, $table);
+        $this->assertEmpty($table->findAll());
 
         $item = $table->insertOne([
             IHaveId::FIELD__ID => 'existed',
             'value' => 'some'
         ]);
 
-        $this->assertEquals('existed', $item->getId());
+        $this->assertInstanceOf(Some::class, $item);
+        $this->assertNotEmpty($item instanceof Some ? $item->getId() : '');
+        $this->assertEquals('existed', $item instanceof Some ? $item->getId() : 'existed');
 
         unlink('/tmp/db.test.json');
         unlink('/tmp/plugins.php');
