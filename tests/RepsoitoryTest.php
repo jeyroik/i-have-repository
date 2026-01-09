@@ -40,8 +40,11 @@ class RepsoitoryTest extends TestCase
 
     public function testRewrite()
     {
-        putenv('REPOSITORY__PLUGINS_FILE=/tmp/plugins.php');
-        file_put_contents('/tmp/plugins.php', '<?php return [' . RepoPluginUuid::class . '::class => ["rw" => false]];');
+        putenv('REPOSITORY__PLUGINS_FILE=/tmp/plugins2.php');
+        file_put_contents(
+            '/tmp/plugins2.php', 
+            '<?php return [' . RepoPluginUuid::class . '::class => ["'
+            . RepoPluginUuid::OPTION__REWRITE . '" => ' . RepoPluginUuid::REWRITE_OFF . ']];');
 
         if (is_file('/tmp/db.test.json')) {
             unlink('/tmp/db.test.json');
@@ -61,6 +64,6 @@ class RepsoitoryTest extends TestCase
         $this->assertEquals('existed', $item instanceof Some ? $item->getId() : 'existed');
 
         unlink('/tmp/db.test.json');
-        unlink('/tmp/plugins.php');
+        unlink('/tmp/plugins2.php');
     }
 }
